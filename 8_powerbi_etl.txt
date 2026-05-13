@@ -1,0 +1,75 @@
+1)OPEN POWER BI DESKTOP 
+
+2)GET DATA FROM ODATA FEED
+url: http://services.odata.org/V3/Northwind/Northwind.svc
+
+3)select : order,products,order_details
+click on transform data
+
+4)keep only:
+
+ProductID
+ProductName
+QuantityPerUnit
+UnitsInStock
+
+5)In Products Table:
+Hold Ctrl
+Select:
+ProductID
+ProductName
+QuantityPerUnit
+UnitsInStock
+Right-click any selected column
+Click:
+
+➡ Remove Other Columns
+
+6)STEP 6 — EXPAND ORDER_DETAILS TABLE
+
+This is very important ETL transformation.
+
+Your practical explains expanding related table data.
+
+HOW TO DO IT
+Open Orders Table
+Scroll right
+Find:
+Order_Details column
+
+You will see a small expand icon (↔).
+
+Click expand icon
+In Expand Window
+Uncheck:
+Select All Columns
+Check ONLY:
+ProductID
+UnitPrice
+Quantity
+Uncheck:
+Use original column name as prefix
+Click OK
+
+Now Power BI adds:
+
+ProductID
+UnitPrice
+Quantity
+
+inside Orders table.
+
+7)CLOSE & LOAD
+
+Now ETL transformation is complete.
+
+Click:
+Home → Close & Apply
+
+Power BI loads data into model.
+
+This is the Loading phase.
+
+
+
+

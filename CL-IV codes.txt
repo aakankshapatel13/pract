@@ -1,0 +1,158 @@
+﻿If asked to do on hadoop:
+Cmds to put on cmd:
+
+
+(if hadoop already installed)
+hadoop version
+
+
+cd C:\
+mkdir input
+
+
+echo Hello Hadoop Hello World Hadoop is great > C:\input\file1.txt
+
+
+rmdir /s /q C:\output
+
+
+hadoop jar C:\hadoop\share\hadoop\mapreduce\hadoop-mapreduce-examples-3.3.6.jar 
+
+
+wordcount C:\input C:\output
+
+
+type C:\output\part-r-00000
+
+
+.
+.
+.
+.
+
+
+(if hadoop not installed)
+winget install Microsoft.OpenJDK.11
+
+
+setx JAVA_HOME "C:\Program Files\Microsoft\jdk-11"
+setx HADOOP_HOME "C:\hadoop"
+setx PATH "%PATH%;%JAVA_HOME%\bin;%HADOOP_HOME%\bin"
+
+
+java -version
+hadoop version
+
+
+cd C:\hadoop\etc\hadoop
+
+
+echo ^<configuration^>^
+^<property^>^
+^<name^>fs.defaultFS^</name^>^
+^<value^>file:///^</value^>^
+^</property^>^
+^</configuration^> > core-site.xml
+
+
+copy mapred-site.xml.template mapred-site.xml
+
+
+echo ^<configuration^>^
+^<property^>^
+^<name^>mapreduce.framework.name^</name^>^
+^<value^>local^</value^>^
+^</property^>^
+^</configuration^> > mapred-site.xml
+
+
+echo ^<configuration^>^
+^<property^>^
+^<name^>dfs.replication^</name^>^
+^<value^>1^</value^>^
+^</property^>^
+^</configuration^> > hdfs-site.xml
+
+
+mkdir C:\input
+
+
+echo Hello Hadoop Hello World Hadoop is great > C:\input\file1.txt
+
+
+rmdir /s /q C:\output
+
+
+:: If Hadoop still tries to connect to localhost:10000 or YARN,
+:: force local standalone mode:
+
+
+set HADOOP_OPTS=-Dfs.defaultFS=file:/// -Dmapreduce.framework.name=local
+
+
+hadoop jar C:\hadoop\share\hadoop\mapreduce\hadoop-mapreduce-examples-3.3.6.jar wordcount -D mapreduce.framework.name=local -D fs.defaultFS=file:/// C:\input C:\output
+
+
+dir C:\output
+
+
+type C:\output\part-r-00000
+
+
+
+
+
+
+
+
+(if hadoop doesnt work and u have no other option last option is ki do on vscode, heres how to do that):
+(
+mapper.py
+
+
+import sys
+
+
+for line in sys.stdin:
+    words = line.strip().split()
+    for word in words:
+        print("{}\t1".format(word.lower()))
+
+
+reducer.py
+
+
+import sys
+
+
+current_word = None
+current_count = 0
+
+
+for line in sys.stdin:
+    word, count = line.strip().split("\t")
+    count = int(count)
+
+
+    if current_word == word:
+        current_count += count
+    else:
+        if current_word:
+            print("{}\t{}".format(current_word, current_count))
+        current_word = word
+        current_count = count
+
+
+# Last word output
+if current_word:
+    print("{}\t{}".format(current_word, current_count))
+
+
+Commands:
+
+
+Make a input.txt file in the same folder
+And write cmd:
+
+
+type input.txt | python mapper.py | sort | python reducer.py
